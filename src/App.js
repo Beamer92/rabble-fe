@@ -1,26 +1,46 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {BrowserRouter, Switch, Route} from 'react-router-dom'
+import AuthenticatedRoute from './AuthenticatedRoute'
+import SignInMaster from './SignInMaster'
+import Home from './Home'
+import request from './utils/request'
 
 class App extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      authentication: {
+        pendering: true,
+        user: null
+      }
+    }
+  }
+
+  setAuthentication = claim => {
+    this.setState({
+      authentication : {
+        pending: false,
+        user: claim
+      }
+    })
+  }
+
+  componentDidMount(){
+    request('/auth/token')
+    .then(response => this.setAuthentication(response.data))
+    .catch(err => this.setAuthentication(null))
+  }
+
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+      <BrowserRouter>
+        <Switch>
+			<AuthenticatedRoute exact path='/home' component={Home} authentication={this.state.authentication}/>
+        	<Route path='/login' render={(props) => <SignInMaster {...props} setAuthentication={this.setAuthentication} />} />
+			<Route path='/' render={(props) => <SignInMaster {...props} setAuthentication={this.setAuthentication} />} />
+        </Switch>
+    </BrowserRouter>
     );
   }
 }
