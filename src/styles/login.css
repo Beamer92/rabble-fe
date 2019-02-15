@@ -3,9 +3,7 @@
   display: flex;
   -ms-flex-align: center;
   align-items: center;
-  /* padding-top: 40px; */
-  /* padding-bottom: 40px; */
-  background-color: #f5f5f5;
+  justify-content: center;
   height: 100%;
 }
 
@@ -14,7 +12,6 @@
 }
 
 .login-auth-error {
-  margin-bottom: 5px;
   text-align: center;
 }
 
@@ -23,17 +20,8 @@
   max-width: 330px;
   padding: 15px;
   margin: auto;
-}
-
-.login-form .form-control {
-  position: relative;
-  box-sizing: border-box;
-  height: auto;
-  padding: 10px;
+  background-color: #f5f5f5;
   font-size: 16px;
-}
-.login-form {
-  z-index: 2;
 }
 
 .login-form input[type="text"] {
@@ -45,4 +33,29 @@
   margin-bottom: 5px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+}
+
+.sub-button {
+  margin-bottom: 10px;
+}
+
+.img {
+  height: 80%;
+  width: 80%;
+}
+
+.footer {
+  display: flex;
+  margin: 5em;
+  justify-items: space-between;
+}
+
+.nav {
+  height: 10em;
+  margin: 1em;
+  background-image: url("../imgs/Rover.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 0% 0%;
+  background-size: 100% 100%;
 }

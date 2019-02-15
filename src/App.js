@@ -28,7 +28,7 @@ class App extends Component {
   }
 
   componentDidMount(){
-    request('/auth/token')
+    request('/auth')
     .then(response => this.setAuthentication(response.data))
     .catch(err => this.setAuthentication(null))
   }
