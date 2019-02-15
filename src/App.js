@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import {BrowserRouter, Switch, Route} from 'react-router-dom'
 import AuthenticatedRoute from './AuthenticatedRoute'
-import SignInMaster from './SignInMaster'
 import Home from './Home'
 import request from './utils/request'
+import SignUp from './SignUp'
+import Login from './Login'
 
 class App extends Component {
   constructor(props) {
@@ -36,9 +37,10 @@ class App extends Component {
     return (
       <BrowserRouter>
         <Switch>
-			<AuthenticatedRoute exact path='/home' component={Home} authentication={this.state.authentication}/>
-        	<Route path='/login' render={(props) => <SignInMaster {...props} setAuthentication={this.setAuthentication} />} />
-			<Route path='/' render={(props) => <SignInMaster {...props} setAuthentication={this.setAuthentication} />} />
+			    <AuthenticatedRoute exact path='/home' component={Home} authentication={this.state.authentication}/>
+        	<Route path='/login' render={(props) => <Login {...props} setAuthentication={this.setAuthentication} />} />
+          <Route path='/signup' render={(props) => <SignUp {...props} setAuthentication={this.setAuthentication} />} />
+			    <Route path='/' render={(props) => <Login {...props} setAuthentication={this.setAuthentication} />} />
         </Switch>
     </BrowserRouter>
     );

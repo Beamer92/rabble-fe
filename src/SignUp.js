@@ -3,35 +3,42 @@ import {Form, Label, Input, Button} from 'reactstrap'
 import request from './utils/request'
 import './styles/login.css'
 
-class Login extends Component{
+class SignUp extends Component{
     constructor(props){
         super(props)
         this.state = {
-          showErrorMessage: false
+          showErrorMessage: false,
+          inputUser: '',
+          inputPassword: '',
+          inputPassword2: ''
         }
       }
 
     submitLogin = event => {
         event.preventDefault()
-
         const {inputUser, inputPassword } = event.target
 
-        request('/auth', 'post', {username: inputUser.value, password: inputPassword.value})
+        request('/auth', 'post', {username: this.state.inputUser, password: this.state.inputPassword})
         .then(response => {
             this.setState({ showErrorMessage: false })
             localStorage.setItem('token', response.data.token)
             return request('/auth')
         })
         .then(response => {
-            console.log(response.data)
             this.props.setAuthentication(response.data)
-            
             this.props.history.push('/home')
         })
         .catch(error => {
             this.setState({showErrorMessage: true})
         })  
     }
+
+    handleChange = event => {
+        this.setState({
+            [event.target.name] : event.target.value
+          })
+    }
+
 
     render(){
         return(
@@ -42,21 +49,30 @@ class Login extends Component{
                 <div className='container'>
                     <div className='login'>
                         <Form className='login-form'>
-                            <h2>Login To Play</h2>
+                            <h2>Sign Up To Play</h2>
                             <Label>Username</Label>
                             <Input type='text' name='inputUser' placeholder="Enter your username here" required autoFocus /> <br/>
                             <Label>Password</Label>
-                            <Input type='password' name='inputPassword' placeholder="************" required/> <br/>
+                            <Input type='password' name='inputPassword' placeholder="************" minLength='8' 
+                            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[._^%&*@#]).{8,}" value={this.state.inputPassword} onChange={this.handleChange} required/> <br/>
+                            
+                            <Label>Verify Password</Label>
+                            <Input type='password' name='inputPassword2' placeholder="************" minLength='8' 
+                            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[._^%&*@#]).{8,}" value={this.state.inputPassword} onChange={this.handleChange} required/> <br/>
+                            {this.state.pw1 !== this.state.pw2
+                                ? <span className="passwordWarning">Passwords do not match</span>
+                                : ''
+                            }
                             <div className={ !this.state.showErrorMessage ? 'login-auth-error login-hide-auth-error' : 'login-auth-error' }>
-                                Log In Failed: Invalid Username or Password
+                            Username Already Exists
                             </div>
                             <Button type='submit'>Submit</Button>
                         </Form>
                     </div>
                 </div>
             </div>
-        )
+        )   
     }
 }
 
-export default Login
+export default SignUp
