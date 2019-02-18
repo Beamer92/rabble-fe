@@ -37,10 +37,9 @@ class App extends Component {
     return (
       <BrowserRouter>
         <Switch>
-			    <AuthenticatedRoute exact path='/home' component={Home} authentication={this.state.authentication}/>
+          <AuthenticatedRoute path='/' authentication={this.state.authentication} render={(props) => <Home {...props}/>}/>
         	<Route path='/login' render={(props) => <Login {...props} setAuthentication={this.setAuthentication} />} />
           <Route path='/signup' render={(props) => <SignUp {...props} setAuthentication={this.setAuthentication} />} />
-			    <Route path='/' render={(props) => <Login {...props} setAuthentication={this.setAuthentication} />} />
         </Switch>
     </BrowserRouter>
     );

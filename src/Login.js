@@ -25,7 +25,7 @@ class Login extends Component{
         })
         .then(response => {
             this.props.setAuthentication(response.data)
-            this.props.history.push('/home')
+            this.props.history.push('/')
         })
         .catch(error => {
             this.setState({showErrorMessage: true})
@@ -36,8 +36,7 @@ class Login extends Component{
         return(
             <div className='entrypage'>
                 <nav className='nav'>
-                    <h1>Rabble Rover!</h1>
-                    {/* <span>Explore Mars, Show Off Your Lexicon, Dominate!</span> */}
+                    <h1 className='title'>Rabble Rover!</h1>
                 </nav>
                 <div className='container'>
                     <div className='login row'>
@@ -58,7 +57,7 @@ class Login extends Component{
                 <footer className='footer'>
                         <div className='foot-item'>
                             <h4>Our Office Location</h4>
-                            <a href='http://mars3dmap.com'><img className='img' src={require('./imgs/Opportunity.png')}/></a>  
+                            <a href='http://mars3dmap.com'><img className='img' alt='' src={require('./imgs/Opportunity.png')}/></a>  
                         </div>
                         <div className='foot-item'>
                             <h4>The Game:</h4>

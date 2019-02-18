@@ -30,7 +30,7 @@ class SignUp extends Component{
         .then(response => {
             console.log('2',response)
             this.props.setAuthentication(response.data)
-            this.props.history.push('/home')
+            this.props.history.push('/')
         })
         .catch(error => {
             console.log(error)
@@ -48,8 +48,8 @@ class SignUp extends Component{
     render(){
         return(
             <div className='entrypage'>
-                <nav>
-                    <h1>Rabble Rover!</h1>
+                 <nav className='nav'>
+                    <h1 className='title'>Rabble Rover!</h1>
                 </nav>
                 <div className='container'>
                     <div className='login'>
@@ -60,7 +60,6 @@ class SignUp extends Component{
                             <Label>Password</Label>
                             <Input type='password' name='inputPassword' placeholder="************" minLength='8' 
                             pattern="(?=.*\d)(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[._$^%&*@#]).{8,}" value={this.state.inputPassword} onChange={this.handleChange} required/>
-                            
                             <Label>Verify Password</Label>
                             <Input type='password' name='inputPassword2' placeholder="************" minLength='8' 
                             pattern="(?=.*\d)(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[._$^%&*@#]).{8,}" value={this.state.inputPassword2} onChange={this.handleChange} required/>
@@ -76,6 +75,23 @@ class SignUp extends Component{
                         </Form>
                     </div>
                 </div>
+                <footer className='footer'>
+                        <div className='foot-item'>
+                            <h4>Our Office Location</h4>
+                            <a href='http://mars3dmap.com'><img className='img' alt='' src={require('./imgs/Opportunity.png')}/></a>  
+                        </div>
+                        <div className='foot-item'>
+                            <h4>The Game:</h4>
+                            <p>Mars is littered with rocks that look suspiciously like English Letters! 
+                                Your goal is to command your rover to collect as many of these rocks as possible
+                                to try and form a word. At the end of each round the rocks collected will be scored like a Scrabble word. 
+                                The rover with the best word will win the round! <br/><br/>
+
+                                Your rover can take up to 5 commands per round, it can change direction or move forward once per command. 
+                                You'll have to be clever about your moves in order to get the best letters the fastest. 
+                            </p>
+                        </div>
+                </footer>
             </div>
         )   
     }
