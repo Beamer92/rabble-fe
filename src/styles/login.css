@@ -84,6 +84,7 @@ div.container {
 
 .sidebar {
   background-color: rgb(196, 184, 184);
+
 }
 
 .gameActions button {
@@ -91,6 +92,36 @@ div.container {
   margin: 3px;
 }
 
+.gameActions p.game{
+  font-weight: bold;
+}
+
 #navhome {
   margin-bottom: 0em;
+}
+
+#letters {
+  background-color:  rgb(196, 184, 184);
+}
+
+.rwlet {
+  display: flex;
+}
+
+.letter {
+  background-color: whitesmoke;
+  color: black;
+  font-weight: bold;
+  margin: 2px;
+  padding: 3px;
+}
+
+.undoAction {
+    font-size: 12px;
+    color:rgb(34, 78, 172);
+    text-decoration: underline;
+}
+
+.undoAction:hover{
+  color: rgb(94, 134, 221);
 }

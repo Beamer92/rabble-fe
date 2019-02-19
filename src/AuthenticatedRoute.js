@@ -15,7 +15,7 @@ const AuthenticatedRoute = props => {
     return <div>Loading...</div>
   }
   else if(user) {
-    return <Route path='/' render={(props) => <Home {...props} authentication={user}/>} /> 
+    return <Route path='/home' render={(props) => <Home {...props} authentication={user}/>} />
   }
   else {
     return <Redirect to='/login' />

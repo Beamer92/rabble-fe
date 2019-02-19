@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import request from './utils/request'
-import { Form, Input, Label, Button } from 'reactstrap'
+import { Form, Button } from 'reactstrap'
 
 class Home extends Component {
     constructor(props) {
@@ -52,6 +52,13 @@ class Home extends Component {
         }
     }
 
+    handleUndo = () => {
+        this.setState({
+            actionsLeft: this.state.actionsLeft === 5 ? 5 : this.state.actionsLeft + 1,
+            instructions: this.state.instructions.slice(0, this.state.instructions.length -1)
+        })
+    }
+
     render() {
         return (
             <div className='entrypage'>
@@ -63,36 +70,35 @@ class Home extends Component {
                         <nav className='col-md-2 d-none d-md-block sidebar'>
                             <h6>GameId: </h6>
                             <p></p>
-
                             <h6>UserId: </h6>
                             <p>{this.state.user.username}</p>
-
                             <h6>My Best Score: </h6>
                             <p>{this.state.user.highestScore}</p>
-
                             <h6>My Games Won: </h6>
                             <p>{this.state.user.gamesWon}</p>
-
                             <h5>This Round:</h5>
+
                             <Form className='gameActions'>
-                                <Label>Actions Left:</Label>
-                                <p>{this.state.actionsLeft}</p>
-                                <p>{this.state.instructions}</p>
+                                <p className='game'>Actions Left: {this.state.actionsLeft}</p>
+                                <p className='game'>Instructions: {this.state.instructions}</p>
 
                                 <Button name='left' id='left' onClick={this.handleMove} disabled={this.state.actionsLeft < 1 ? true : false}>Left</Button>
                                 <Button name='right' id='right' onClick={this.handleMove} disabled={this.state.actionsLeft < 1 ? true : false}>Right</Button>
                                 <Button name='forward' id='forward' onClick={this.handleMove} disabled={this.state.actionsLeft < 1 ? true : false}>Forward</Button>
-
+                                <div class='undoAction' onClick={this.handleUndo}>undo</div>
+                                <Button type='submit'>Go!</Button>
                             </Form>
                         </nav>
                         <div className='col-md'>
-                            herp
+                            HERPDERPGAMEHERE
                         </div>
                     </div>
                     <div className='row' id='letters'>
-                        {this.state.letters.map((letter, ind) => {
+                        <nav className='col-md-2 d-none d-md-block sidebar'></nav>
+                         <div className='rwlet'>{this.state.letters.map((letter, ind) => {
                             return <div className='letter' id={'letter' + ind} key={'letter' + ind}>{letter.toUpperCase()}</div>
-                        })}
+                        })}</div>
+                        
                     </div>
                 </div>
             </div>

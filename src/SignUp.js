@@ -28,9 +28,8 @@ class SignUp extends Component{
             return request('/auth')
         })
         .then(response => {
-            console.log('2',response)
             this.props.setAuthentication(response.data)
-            this.props.history.push('/')
+            this.props.history.push('/home')
         })
         .catch(error => {
             console.log(error)
