@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import request from './utils/request'
 import { Form, Button } from 'reactstrap'
+import socketIOClient from "socket.io-client";
 
 class Home extends Component {
     constructor(props) {
         super(props)
+        this.socket = socketIOClient(process.env.REACT_APP_BACKEND);
 
         this.state = {
             letters: ['A', 'B', 'C', 'd', 'e'],
@@ -13,9 +15,30 @@ class Home extends Component {
             instructions: '',
             actionsLeft: 5
         }
+
+        
+    }
+
+    send = () => {
+        this.socket.emit('send letters', this.state.letters)
+    }
+
+    connectGame = () => {
+        if(this.state.user.hasOwnProperty('username')) {
+            this.socket.emit('connect game', this.state.user.username)
+        }
     }
 
     componentDidMount() {
+        // setInterval(this.send, 1000)
+        // this.socket.on('send letters', (letters) => {
+        //     console.log('on letters sent', letters)
+        // })
+
+        this.socket.on('connect game', (gameId) => {
+            console.log('connected to game ', gameId)
+        })
+
         request(`/user/${this.props.authentication.id}`, 'get')
             .then(response => {
                 this.setState({
@@ -25,6 +48,10 @@ class Home extends Component {
             .catch(err => {
                 console.log(err)
             })
+    }
+
+    componentWillUnmount(){
+        this.socket.disconnect()
     }
 
     handleMove = event => {
@@ -60,6 +87,7 @@ class Home extends Component {
     }
 
     logout = () => {
+        this.socket.disconnect()
         window.localStorage.clear()
         this.props.history.push('/login')
     }
@@ -80,10 +108,16 @@ class Home extends Component {
     }
 
     render() {
+
+        // const socket = socketIOClient(process.env.REACT_APP_BACKEND);
+        // console.log(this.socket)
+        this.connectGame()
+
         return (
             <div className='entrypage'>
                 <nav className='nav' id='navhome'>
                     <div className="backButton" onClick={this.logout}>Logout</div>
+                    <div className="testsocket" onClick={this.send}>SENDIT</div>
                     <h1 className='title'>Rabble Rover!</h1>
                 </nav>
                 <div className='container-fluid'>
