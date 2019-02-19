@@ -106,14 +106,22 @@ div.container {
 
 .rwlet {
   display: flex;
+  padding: 1em;
 }
 
 .letter {
   background-color: whitesmoke;
   color: black;
   font-weight: bold;
+  font-size: 16pt;
   margin: 2px;
+  margin-left: .5em;
+  margin-right: .5em;
   padding: 3px;
+}
+
+.letter:hover{
+  background-color: red;
 }
 
 .undoAction {
@@ -122,6 +130,17 @@ div.container {
     text-decoration: underline;
 }
 
-.undoAction:hover{
+.undoAction:hover,.backButton:hover{
   color: rgb(94, 134, 221);
+}
+
+.backButton{
+  font-size: 15px;
+  font-weight: bold;
+  position:absolute;
+  top:23px;
+  left:23px;
+  color:rgb(255, 255, 255);
+  text-shadow: rgb(0, 0, 0) 1px 1px;
+  text-decoration: underline;
 }

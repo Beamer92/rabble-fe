@@ -59,10 +59,31 @@ class Home extends Component {
         })
     }
 
+    logout = () => {
+        window.localStorage.clear()
+        this.props.history.push('/login')
+    }
+
+    submitRabble = () => {
+        const word = this.state.letters.join('')
+        console.log(word)
+        //go to the Wordnik API and score it. If no response, then 0
+        // determine winner and update each user's stats
+    }
+
+    dropLetter = event => {
+        let newlet = this.state.letters
+        newlet.splice(event.target.id, 1)
+        this.setState({
+            letters: newlet
+        })
+    }
+
     render() {
         return (
             <div className='entrypage'>
                 <nav className='nav' id='navhome'>
+                    <div className="backButton" onClick={this.logout}>Logout</div>
                     <h1 className='title'>Rabble Rover!</h1>
                 </nav>
                 <div className='container-fluid'>
@@ -85,8 +106,8 @@ class Home extends Component {
                                 <Button name='left' id='left' onClick={this.handleMove} disabled={this.state.actionsLeft < 1 ? true : false}>Left</Button>
                                 <Button name='right' id='right' onClick={this.handleMove} disabled={this.state.actionsLeft < 1 ? true : false}>Right</Button>
                                 <Button name='forward' id='forward' onClick={this.handleMove} disabled={this.state.actionsLeft < 1 ? true : false}>Forward</Button>
-                                <div class='undoAction' onClick={this.handleUndo}>undo</div>
-                                <Button type='submit'>Go!</Button>
+                                <div className='undoAction' onClick={this.handleUndo}>undo</div>
+                                <Button type='submit'>Execute Instructions!</Button>
                             </Form>
                         </nav>
                         <div className='col-md'>
@@ -96,9 +117,9 @@ class Home extends Component {
                     <div className='row' id='letters'>
                         <nav className='col-md-2 d-none d-md-block sidebar'></nav>
                          <div className='rwlet'>{this.state.letters.map((letter, ind) => {
-                            return <div className='letter' id={'letter' + ind} key={'letter' + ind}>{letter.toUpperCase()}</div>
+                            return <div className='letter' id={ind} key={ind} onClick={this.dropLetter}>{letter.toUpperCase()}</div>
                         })}</div>
-                        
+                        <Button className='rabble' onClick={this.submitRabble}>Submit Rabble</Button>
                     </div>
                 </div>
             </div>

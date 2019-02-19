@@ -12,7 +12,7 @@ class App extends Component {
 
     this.state = {
       authentication: {
-        pendering: true,
+        pending: true,
         user: null
       }
     }
@@ -25,7 +25,7 @@ class App extends Component {
         user: claim
       }
     })
-  }
+  }   
 
   componentDidMount(){
     request('/auth')
