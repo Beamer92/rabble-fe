@@ -9,41 +9,70 @@ class Home extends Component {
         this.socket = socketIOClient(process.env.REACT_APP_BACKEND);
 
         this.state = {
+            gameId: '',
             letters: ['A', 'B', 'C', 'd', 'e'],
             user: {},
             rover: {},
             instructions: '',
-            actionsLeft: 5
+            actionsLeft: 5,
+            mapgrid: []
+            // users: [],
+            // rovers: []
         }
 
-        
     }
 
-    send = () => {
+    send(){
         this.socket.emit('send letters', this.state.letters)
     }
 
-    connectGame = () => {
-        if(this.state.user.hasOwnProperty('username')) {
-            this.socket.emit('connect game', this.state.user.username)
-        }
+    connectGame(username){
+        this.socket.emit('connect game', username)
+    }
+
+    getGame(gameId) {
+        this.socket.emit('get game', gameId)
+    }
+
+    getUser(username){
+        this.socket.emit('get user', username)
     }
 
     componentDidMount() {
-        // setInterval(this.send, 1000)
-        // this.socket.on('send letters', (letters) => {
-        //     console.log('on letters sent', letters)
-        // })
 
-        this.socket.on('connect game', (gameId) => {
-            console.log('connected to game ', gameId)
+        this.socket.on('connect game', (gameId, username) => {
+            console.log(username, 'has connected to game ', gameId)
+            this.setState({gameId})
+            this.getGame(gameId)
+        })   
+
+        this.socket.on('get user', (user) => {
+            console.log('user is ', user)
+            let position = JSON.parse(user.position)
+            let letters = JSON.parse(user.letters)
+            if(position.length === 0){
+                position = [Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)]
+            }
+            this.setState({
+                rover: {...this.state.rover, position: position, face: user.face},
+                letters: letters
+            })
         })
 
+        this.socket.on('get game', (game) => {
+            const newMap = JSON.parse(game.map)
+            this.setState({mapgrid: newMap})
+        })
+
+        //Mongo User data, NOT redis data
         request(`/user/${this.props.authentication.id}`, 'get')
             .then(response => {
+                console.log(response.data)
                 this.setState({
                     user: response.data
                 })
+                this.connectGame(response.data.username)
+                this.getUser(response.data.username)
             })
             .catch(err => {
                 console.log(err)
@@ -92,9 +121,11 @@ class Home extends Component {
         this.props.history.push('/login')
     }
 
-    submitRabble = () => {
+    submitRabble = (event) => {
+        event.preventDefault()
         const word = this.state.letters.join('')
         console.log(word)
+
         //go to the Wordnik API and score it. If no response, then 0
         // determine winner and update each user's stats
     }
@@ -109,10 +140,6 @@ class Home extends Component {
 
     render() {
 
-        // const socket = socketIOClient(process.env.REACT_APP_BACKEND);
-        // console.log(this.socket)
-        this.connectGame()
-
         return (
             <div className='entrypage'>
                 <nav className='nav' id='navhome'>
@@ -121,10 +148,10 @@ class Home extends Component {
                     <h1 className='title'>Rabble Rover!</h1>
                 </nav>
                 <div className='container-fluid'>
-                    <div className='row'>
+                    <div className='row gamerw'>
                         <nav className='col-md-2 d-none d-md-block sidebar'>
                             <h6>GameId: </h6>
-                            <p></p>
+                            <p>{this.state.gameId}</p>
                             <h6>UserId: </h6>
                             <p>{this.state.user.username}</p>
                             <h6>My Best Score: </h6>
@@ -144,8 +171,15 @@ class Home extends Component {
                                 <Button type='submit'>Execute Instructions!</Button>
                             </Form>
                         </nav>
-                        <div className='col-md'>
-                            HERPDERPGAMEHERE
+                        <div className='col-md mapgrid'>
+                        {this.state.mapgrid.map((rw, ind) => {
+                            return <div className='gridrw' id={ind} key={'gr' + ind}>
+                            {rw.map((box, idx) => {
+                                // console.log(ind, idx)
+                                return <div className='gridbox' id={idx} key={'gb' + idx}>{box}</div>
+                                })}
+                            </div>
+                        })}
                         </div>
                     </div>
                     <div className='row' id='letters'>
@@ -162,3 +196,5 @@ class Home extends Component {
 }
 
 export default Home
+
+
