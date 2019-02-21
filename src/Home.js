@@ -17,7 +17,9 @@ class Home extends Component {
             instructions: '',
             actionsLeft: 5,
             mapgrid: [],
-            otherRovers: []
+            otherRovers: [],
+            showErrorMessage: false,
+            myTurn: true
         }
     }
 
@@ -38,12 +40,12 @@ class Home extends Component {
         this.socket.emit('get user', username)
     }
 
-    setUser=()=>{
-        this.socket.emit('set user', this.state.user.username, this.state.rover, this.state.letters)
+    setUser=(username, rover, letters)=>{
+        this.socket.emit('set user', username, rover, letters)
     }
 
-    setGame=()=>{
-        this.socket.emit('set game', this.state.gameId, this.state.mapgrid)
+    setGame=(gameId, mapgrid)=>{
+        this.socket.emit('set game', gameId, mapgrid)
     }
 
     otherUsers=(userList)=>{
@@ -73,7 +75,7 @@ class Home extends Component {
             let face = user.face
             let flag = false
             if(position.length === 0){
-                position = [Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)]
+                position = [Math.floor(Math.random() * 8), Math.floor(Math.random() * 8)]
                 flag = true
             }
             this.setState({
@@ -82,7 +84,7 @@ class Home extends Component {
             })
 
             if(flag === true){
-                this.setUser()
+                this.setUser(this.state.username, {position, face}, user.letters)
             }
         })
 
@@ -115,7 +117,7 @@ class Home extends Component {
         this.socket.disconnect()
     }
 
-    handleMove=(event)=>{
+    handleAction=(event)=>{
         switch (event.target.name) {
             case 'left':
                 this.setState({
@@ -141,6 +143,7 @@ class Home extends Component {
     }
 
     handleUndo=()=>{
+        if(!this.state.myTurn) return
         this.setState({
             actionsLeft: this.state.actionsLeft === 5 ? 5 : this.state.actionsLeft + 1,
             instructions: this.state.instructions.slice(0, this.state.instructions.length -1)
@@ -188,10 +191,48 @@ class Home extends Component {
 
     executeInstructions=(event)=>{
         event.preventDefault()
+        if(!this.state.myTurn) return
+
         let results = operate(this.state.rover.position, this.state.rover.face, this.state.instructions)
-        console.log(results)
+        let newRover = {position: results.position, face: results.face}
+        if(results.hasOwnProperty('error')){
+            this.setState({
+                showErrorMessage: true,
+                rover: newRover,
+                instructions: '',
+                myTurn: false,
+                actionsLeft: 0
+            })
+            this.setUser(this.state.user.username, newRover, this.state.letters)
+        }
+        else {
+            let x = results.position[0]
+            let y = results.position[1]
+            let boxLetter = this.state.mapgrid[x][y]
+            if(boxLetter !== ''){
+                let newLetters = this.state.letters.concat(boxLetter)
+                let newMap = this.state.mapgrid.slice(0)
+                newMap[x][y] = ''
+                this.setState({
+                    rover: newRover,
+                    letters: newLetters,
+                    mapgrid: newMap,
+                    instructions: '',
+                    myTurn: false,
+                    actionsLeft: 0
+                })
+                this.setUser(this.state.user.username, newRover, newLetters)
+                this.setGame(this.state.gameId, newMap)
+            }
+            else {
+                this.setUser(this.state.user.username, newRover, this.state.letters)
+            }
+        }
+
+        
+
+        
         //NOW, update state or show error AND update redis for user
-        // THEN we'll work on collecting letters
     }
 
     render() {
@@ -220,23 +261,33 @@ class Home extends Component {
 
                             <Form className='gameActions'onSubmit={this.executeInstructions}>
                                 <p className='game'>Actions Left: {this.state.actionsLeft}</p>
-                                <p className='game'>Instructions: {this.state.instructions}</p>
+                                <p className='game'>Instructions:</p>
+                                <p className='instructions'>{this.state.instructions}</p>
 
-                                <Button name='left' id='left' onClick={this.handleMove} disabled={this.state.actionsLeft < 1 ? true : false}>Left</Button>
-                                <Button name='right' id='right' onClick={this.handleMove} disabled={this.state.actionsLeft < 1 ? true : false}>Right</Button>
-                                <Button name='forward' id='forward' onClick={this.handleMove} disabled={this.state.actionsLeft < 1 ? true : false}>Forward</Button>
+                                <Button name='left' id='left' onClick={this.handleAction} disabled={this.state.actionsLeft < 1 ? true : false}>Left</Button>
+                                <Button name='right' id='right' onClick={this.handleAction} disabled={this.state.actionsLeft < 1 ? true : false}>Right</Button>
+                                <Button name='forward' id='forward' onClick={this.handleAction} disabled={this.state.actionsLeft < 1 ? true : false}>Forward</Button>
                                 <div className='undoAction' onClick={this.handleUndo}>undo</div>
                                 <Button type='submit'>Execute Instructions!</Button>
                             </Form>
                         </nav>
                         <div className='col-md mapgrid'>
-                        {this.state.mapgrid.map((rw, ind) => {
-                            return <div className='gridrw' id={ind} key={'gr' + ind}>
-                            {rw.map((box, idx) => {
-                                return <div className='gridbox' id={idx} key={'gb' + idx}>{box}{this.renderRovers(ind,idx)}</div>
-                                })}
+                            {this.state.mapgrid.map((rw, ind) => {
+                                return <div className='gridrw' id={'gr' +ind} key={'gr' + ind}>
+                                {rw.map((box, idx) => {
+                                    return <div className='gridbox' id={'gb' + idx} key={'gb' + idx}>{box}{this.renderRovers(ind,idx)}</div>
+                                    })}
+                                </div>
+                            })}
+                            <div className='extras col-md-3'>
+                                <img className='compass' src={require('./imgs/compass.png')} alt=''/>
+                                <div className={ this.state.myTurn ? 'myturn' : 'notmyturn' }>
+                                        {this.state.myTurn ? 'It is your turn!' : 'Waiting for other players'}
+                                </div>
+                                <div className={ !this.state.showErrorMessage ? 'crash hide-crash' : 'crash' }>
+                                        Rover Fell off the grid! No letter collected, redeploying to last good location
+                                </div>
                             </div>
-                        })}
                         </div>
                     </div>
                     <div className='row' id='letters'>

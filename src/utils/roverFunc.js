@@ -40,7 +40,7 @@ const operate=(position, face, instructions)=>{
         else if (instructions[0] === "R") return operate(position, turnRight(face), instructions.substr(1))
         else {
             let newPosition = moveForward(position, face)
-            if(!newPosition) return {"position" : position, "face": face, "error": "Crashed at this position, repairing"}
+            if(!newPosition) return {position : position, face: face, error: "Crashed at this position, repairing"}
             return operate(newPosition, face, instructions.substr(1))
         }
     }
