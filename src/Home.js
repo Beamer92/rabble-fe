@@ -15,24 +15,19 @@ class Home extends Component {
             user: {},
             rover: {},
             instructions: '',
-            actionsLeft: 5,
+            actionsLeft: 0,
             mapgrid: [],
             otherRovers: [],
             showErrorMessage: false,
-            myTurn: true
+            myTurn: false
         }
-    }
-
-    send=()=>{
-        this.socket.emit('send letters', this.state.letters)
-        // console.log(this.state.rover.position)
     }
 
     connectGame=(username)=>{
         this.socket.emit('connect game', username)
     }
 
-    getGame=(gameId)=>{
+    getGame=(gameId=this.state.gameId)=>{
         this.socket.emit('get game', gameId)
     }
 
@@ -48,6 +43,10 @@ class Home extends Component {
         this.socket.emit('set game', gameId, mapgrid)
     }
 
+    nextTurn= (gameId) => {
+        this.socket.emit('next turn', gameId)    
+    }
+
     otherUsers=(userList)=>{
         if(this.state.user.hasOwnProperty('username')){
             let skip = userList.indexOf(this.state.user.username)
@@ -57,19 +56,30 @@ class Home extends Component {
     }
 
     componentDidMount(){
-
-        this.socket.on('send letters', (letters, socket) => {
-            console.log(letters, socket)
-        })
+        //Mongo User data, NOT redis data
+        request(`/user/${this.props.authentication.id}`, 'get')
+            .then(response => {
+                if(response){
+                    this.setState({
+                        user: response.data
+                    })
+                    this.connectGame(response.data.username)
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            })
 
         this.socket.on('connect game', (gameId, username) => {
             console.log(username, 'has connected to game ', gameId)
             this.setState({gameId})
             this.getGame(gameId)
+            if(this.state.user.hasOwnProperty('username') && this.state.user.username === username){
+                this.getUser(username)
+            }
         })   
 
         this.socket.on('get user', (user) => {
-            console.log('user is ', user)
             if(!user) return
             let position = JSON.parse(user.position)
             let face = user.face
@@ -84,12 +94,21 @@ class Home extends Component {
             })
 
             if(flag === true){
-                this.setUser(this.state.username, {position, face}, user.letters)
+                this.setUser(this.state.user.username, {position, face}, [])
             }
         })
 
         this.socket.on('get game', (game) => {
-            this.setState({mapgrid: JSON.parse(game.map)})
+            if(game.turn !== '' && game.turn === this.state.user.username){
+                this.setState({ mapgrid: JSON.parse(game.map),
+                                myTurn: true,
+                                actionsLeft: 5})
+
+                //start timer function for turn
+            }
+            else {
+                this.setState({mapgrid: JSON.parse(game.map)})
+            } 
             this.otherUsers(JSON.parse(game.users))
         })
 
@@ -97,20 +116,9 @@ class Home extends Component {
             this.setState({otherRovers: rovers})
         })
 
-        //Mongo User data, NOT redis data
-        request(`/user/${this.props.authentication.id}`, 'get')
-            .then(response => {
-                if(response){
-                    this.setState({
-                        user: response.data
-                    })
-                    this.connectGame(response.data.username)
-                    this.getUser(response.data.username)
-                }
-            })
-            .catch(err => {
-                console.log(err)
-            })
+        this.socket.on('update users', () =>{
+            this.getGame()
+        })
     }
 
     componentWillUnmount=()=>{
@@ -192,7 +200,7 @@ class Home extends Component {
     executeInstructions=(event)=>{
         event.preventDefault()
         if(!this.state.myTurn) return
-
+        console.log('SO OBVIOUSLY ITS MY TURN')
         let results = operate(this.state.rover.position, this.state.rover.face, this.state.instructions)
         let newRover = {position: results.position, face: results.face}
         if(results.hasOwnProperty('error')){
@@ -203,13 +211,17 @@ class Home extends Component {
                 myTurn: false,
                 actionsLeft: 0
             })
+            this.nextTurn(this.state.gameId)
             this.setUser(this.state.user.username, newRover, this.state.letters)
+            
         }
         else {
+            console.log('here')
             let x = results.position[0]
             let y = results.position[1]
             let boxLetter = this.state.mapgrid[x][y]
             if(boxLetter !== ''){
+                console.log('here1')
                 let newLetters = this.state.letters.concat(boxLetter)
                 let newMap = this.state.mapgrid.slice(0)
                 newMap[x][y] = ''
@@ -221,18 +233,24 @@ class Home extends Component {
                     myTurn: false,
                     actionsLeft: 0
                 })
+                this.nextTurn(this.state.gameId)
                 this.setUser(this.state.user.username, newRover, newLetters)
                 this.setGame(this.state.gameId, newMap)
+                
             }
             else {
+                console.log('here2')
+                this.setState({
+                    rover: newRover,
+                    instructions: '',
+                    myTurn: false,
+                    actionsLeft: 0
+                })
+                this.nextTurn(this.state.gameId)
                 this.setUser(this.state.user.username, newRover, this.state.letters)
+                
             }
         }
-
-        
-
-        
-        //NOW, update state or show error AND update redis for user
     }
 
     render() {
@@ -241,7 +259,6 @@ class Home extends Component {
             <div className='entrypage'>
                 <nav className='nav' id='navhome'>
                     <div className="backButton" onClick={this.logout}>Logout</div>
-                    <div className="testsocket" onClick={this.send}>SENDIT</div>
                     <h1 className='title'>Rabble Rover!</h1>
                 </nav>
                 <div className='container-fluid'>
