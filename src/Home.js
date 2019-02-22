@@ -119,6 +119,11 @@ class Home extends Component {
         this.socket.on('update users', () =>{
             this.getGame()
         })
+
+        this.socket.on('score word', (score)=> {
+            console.log('score goes here')
+            console.log(score)
+        })
     }
 
     componentWillUnmount=()=>{
@@ -190,9 +195,9 @@ class Home extends Component {
 
     submitRabble=(event)=>{
         event.preventDefault()
-        const word = this.state.letters.join('')
-        console.log(word)
-
+        // const word = this.state.letters.join('')
+        console.log('scoring')
+        this.socket.emit('score word', this.state.gameId, this.state.user.username, this.state.letters)
         //go to the Wordnik API and score it. If no response, then 0
         // determine winner and update each user's stats
     }
@@ -213,15 +218,12 @@ class Home extends Component {
             })
             this.nextTurn(this.state.gameId)
             this.setUser(this.state.user.username, newRover, this.state.letters)
-            
         }
         else {
-            console.log('here')
             let x = results.position[0]
             let y = results.position[1]
             let boxLetter = this.state.mapgrid[x][y]
             if(boxLetter !== ''){
-                console.log('here1')
                 let newLetters = this.state.letters.concat(boxLetter)
                 let newMap = this.state.mapgrid.slice(0)
                 newMap[x][y] = ''
@@ -239,7 +241,6 @@ class Home extends Component {
                 
             }
             else {
-                console.log('here2')
                 this.setState({
                     rover: newRover,
                     instructions: '',
