@@ -123,6 +123,9 @@ class Home extends Component {
         this.socket.on('score word', (score)=> {
             console.log('score goes here')
             console.log(score)
+            this.setState({
+                user: {...this.state.user, score: score}
+            })        
         })
     }
 
@@ -195,17 +198,13 @@ class Home extends Component {
 
     submitRabble=(event)=>{
         event.preventDefault()
-        // const word = this.state.letters.join('')
-        console.log('scoring')
         this.socket.emit('score word', this.state.gameId, this.state.user.username, this.state.letters)
-        //go to the Wordnik API and score it. If no response, then 0
         // determine winner and update each user's stats
     }
 
     executeInstructions=(event)=>{
         event.preventDefault()
         if(!this.state.myTurn) return
-        console.log('SO OBVIOUSLY ITS MY TURN')
         let results = operate(this.state.rover.position, this.state.rover.face, this.state.instructions)
         let newRover = {position: results.position, face: results.face}
         if(results.hasOwnProperty('error')){
@@ -270,7 +269,7 @@ class Home extends Component {
                             <h6>UserId: </h6>
                             <p>{this.state.user.username}</p>
                             <h6>Position: </h6>
-                            <p>{JSON.stringify(this.state.rover.position)}{' '}{this.state.rover.face}</p>
+                            <p className='roverPos'>{JSON.stringify(this.state.rover.position)}{' '}{this.state.rover.face}</p>
                             <h6>My Best Score: </h6>
                             <p>{this.state.user.highestScore}</p>
                             <h6>My Games Won: </h6>
@@ -286,7 +285,7 @@ class Home extends Component {
                                 <Button name='right' id='right' onClick={this.handleAction} disabled={this.state.actionsLeft < 1 ? true : false}>Right</Button>
                                 <Button name='forward' id='forward' onClick={this.handleAction} disabled={this.state.actionsLeft < 1 ? true : false}>Forward</Button>
                                 <div className='undoAction' onClick={this.handleUndo}>undo</div>
-                                <Button type='submit'>Execute Instructions!</Button>
+                                <Button type='submit' disabled={!this.state.myTurn ? true : false}>Execute Instructions!</Button>
                             </Form>
                         </nav>
                         <div className='col-md mapgrid'>
@@ -299,6 +298,9 @@ class Home extends Component {
                             })}
                             <div className='extras col-md-3'>
                                 <img className='compass' src={require('./imgs/compass.png')} alt=''/>
+                                <div className={ this.state.user.score ? 'showScore' : 'noScore' }>
+                                        {this.state.user.score ? `You Scored ${this.state.user.score}!` : ''}
+                                </div>
                                 <div className={ this.state.myTurn ? 'myturn' : 'notmyturn' }>
                                         {this.state.myTurn ? 'It is your turn!' : 'Waiting for other players'}
                                 </div>
@@ -313,7 +315,7 @@ class Home extends Component {
                          <div className='rwlet'>{this.state.letters.map((letter, ind) => {
                             return <div className='letter' id={ind} key={ind} onClick={this.dropLetter}>{letter.toUpperCase()}</div>
                         })}</div>
-                        <Button className='rabble' onClick={this.submitRabble}>Submit Rabble</Button>
+                        <Button className='rabble' onClick={this.submitRabble} disabled={!this.state.myTurn ? true : false}>Submit Rabble</Button>
                     </div>
                 </div>
             </div>

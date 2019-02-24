@@ -232,3 +232,9 @@ div.container {
 p.instructions {
   height: .5em;
 }
+
+p.roverPos {
+  font-size: 30px;
+  font-weight: bold;
+  color: rgb(141, 29, 29);
+}
