@@ -50,9 +50,10 @@ class Home extends Component {
 
     otherUsers=(userList)=>{
         if(this.state.user.hasOwnProperty('username')){
-            let skip = userList.indexOf(this.state.user.username)
+            let skip = userList.findIndex(u => u.name === this.state.user.username)
             userList.splice(skip, 1)
-            this.socket.emit('get rovers', userList)
+            let gRoverList = userList.map(u => u.name)
+            this.socket.emit('get rovers', gRoverList)
         }
     }
 
@@ -150,6 +151,7 @@ class Home extends Component {
     }
 
     componentWillUnmount=()=>{
+        this.socket.emit('logout', this.state.gameId, this.state.user.username)
         this.socket.disconnect()
     }
 
@@ -187,6 +189,7 @@ class Home extends Component {
     }
 
     logout=()=>{
+        this.socket.emit('logout', this.state.gameId, this.state.user.username)
         this.socket.disconnect()
         window.localStorage.clear()
         this.props.history.push('/login')
@@ -219,7 +222,6 @@ class Home extends Component {
     submitRabble=(event)=>{
         event.preventDefault()
         this.socket.emit('score word', this.state.gameId, this.state.user.username, this.state.letters)
-        // determine winner and update each user's stats
     }
 
     executeInstructions=(event)=>{

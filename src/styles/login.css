@@ -239,6 +239,7 @@ div.winner {
 
 #winPara {
   background-color: rgb(61, 121, 61);
+  padding: .5em;
   color: whitesmoke;
   font-size: 24pt;
   border-radius: 25px;
