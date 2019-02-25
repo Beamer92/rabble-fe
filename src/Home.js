@@ -19,7 +19,8 @@ class Home extends Component {
             mapgrid: [],
             otherRovers: [],
             showErrorMessage: false,
-            myTurn: false
+            myTurn: false,
+            winners: []
         }
     }
 
@@ -121,11 +122,30 @@ class Home extends Component {
         })
 
         this.socket.on('score word', (score)=> {
-            console.log('score goes here')
-            console.log(score)
             this.setState({
-                user: {...this.state.user, score: score}
-            })        
+                user: {...this.state.user, score: score},
+                instructions: '',
+                myTurn: false,
+                actionsLeft: 0
+            })   
+            this.nextTurn(this.state.gameId)     
+        })
+
+        this.socket.on('winners', (gameObj) => {
+            let winners = JSON.parse(gameObj.winners)
+            if(winners.length > 1){
+                console.log('there was a Tie between winners')
+            }
+            else {
+                console.log('winner is X with a score of Y')
+            }
+            this.setState({
+                myTurn: false,
+                actionsLeft: 0,
+                instructions: '',
+                winners: winners
+            })
+          
         })
     }
 
@@ -248,7 +268,6 @@ class Home extends Component {
                 })
                 this.nextTurn(this.state.gameId)
                 this.setUser(this.state.user.username, newRover, this.state.letters)
-                
             }
         }
     }
@@ -289,13 +308,15 @@ class Home extends Component {
                             </Form>
                         </nav>
                         <div className='col-md mapgrid'>
-                            {this.state.mapgrid.map((rw, ind) => {
+                            {this.state.winners.length === 0 ?
+                             this.state.mapgrid.map((rw, ind) => {
                                 return <div className='gridrw' id={'gr' +ind} key={'gr' + ind}>
                                 {rw.map((box, idx) => {
                                     return <div className='gridbox' id={'gb' + idx} key={'gb' + idx}>{box}{this.renderRovers(ind,idx)}</div>
                                     })}
                                 </div>
-                            })}
+                            }) : 
+                            <div className='winner'><img id='winPic' src={require('./imgs/winPic.jpg')} alt=''/><p id='winPara'>THE WINNER SHALL BE DISPLAYED HERE</p></div> }
                             <div className='extras col-md-3'>
                                 <img className='compass' src={require('./imgs/compass.png')} alt=''/>
                                 <div className={ this.state.user.score ? 'showScore' : 'noScore' }>

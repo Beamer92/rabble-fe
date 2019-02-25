@@ -136,22 +136,11 @@ div.container {
 }
 
 .backButton{
-  font-size: 15px;
+  font-size: 16px;
   font-weight: bold;
   position:absolute;
   top:23px;
   left:23px;
-  color:rgb(255, 255, 255);
-  text-shadow: rgb(0, 0, 0) 1px 1px;
-  text-decoration: underline;
-}
-
-.testsocket {
-  font-size: 15px;
-  font-weight: bold;
-  position:absolute;
-  top:23px;
-  left:100px;
   color:rgb(255, 255, 255);
   text-shadow: rgb(0, 0, 0) 1px 1px;
   text-decoration: underline;
@@ -237,4 +226,22 @@ p.roverPos {
   font-size: 30px;
   font-weight: bold;
   color: rgb(141, 29, 29);
+}
+
+div.winner {
+  margin: 1em;
+}
+
+#winPic {
+  max-width: 80%;
+  max-height: 80%;
+}
+
+#winPara {
+  background-color: rgb(61, 121, 61);
+  color: whitesmoke;
+  font-size: 24pt;
+  border-radius: 25px;
+  font-weight: bold;
+  width: fit-content;
 }
