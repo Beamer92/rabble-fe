@@ -20,7 +20,7 @@ class Home extends Component {
             otherRovers: [],
             showErrorMessage: false,
             myTurn: false,
-            winners: []
+            winners: ''
         }
     }
 
@@ -134,17 +134,28 @@ class Home extends Component {
 
         this.socket.on('winners', (gameObj) => {
             let winners = JSON.parse(gameObj.winners)
+            let wstring = 'placeholder'
             if(winners.length > 1){
-                console.log('there was a Tie between winners')
+                let score = winners[0].score
+                let users = winners.map((u, ind) => {
+                    if(ind === (winners.length-1)){
+                        return `and ${u.name} `
+                    }
+                    else if(ind === (winners.length - 2)){
+                        return `${u.name} `
+                    }
+                    return `${u.name}, ` 
+                })
+                wstring = `There was a Tie between ${users.join('')} with a score of ${score}!`
             }
             else {
-                console.log('winner is X with a score of Y')
+                wstring = `The winner is ${winners[0].name} with a score of ${winners[0].score}!`
             }
             this.setState({
                 myTurn: false,
                 actionsLeft: 0,
                 instructions: '',
-                winners: winners
+                winners: wstring
             })
           
         })
@@ -274,6 +285,10 @@ class Home extends Component {
         }
     }
 
+    handleNewGame = () => {
+        this.socket.emit('newGame', this.state.gameId)
+    }
+
     render() {
 
         return (
@@ -310,15 +325,21 @@ class Home extends Component {
                             </Form>
                         </nav>
                         <div className='col-md mapgrid'>
-                            {this.state.winners.length === 0 ?
-                             this.state.mapgrid.map((rw, ind) => {
-                                return <div className='gridrw' id={'gr' +ind} key={'gr' + ind}>
-                                {rw.map((box, idx) => {
-                                    return <div className='gridbox' id={'gb' + idx} key={'gb' + idx}>{box}{this.renderRovers(ind,idx)}</div>
-                                    })}
-                                </div>
-                            }) : 
-                            <div className='winner'><img id='winPic' src={require('./imgs/winPic.jpg')} alt=''/><p id='winPara'>THE WINNER SHALL BE DISPLAYED HERE</p></div> }
+                            {
+                                this.state.winners === '' ?
+                                this.state.mapgrid.map((rw, ind) => {
+                                    return <div className='gridrw' id={'gr' +ind} key={'gr' + ind}>
+                                    {rw.map((box, idx) => {
+                                        return <div className='gridbox' id={'gb' + idx} key={'gb' + idx}>{box}{this.renderRovers(ind,idx)}</div>
+                                        })}
+                                    </div>
+                                }) : 
+                                <div className='winner'>
+                                    <img id='winPic' src={require('./imgs/winPic.jpg')} alt=''/>
+                                    <p id='winPara'>{this.state.winners}</p>
+                                    <Button onClick={this.handleNewGame}>Play Again</Button>
+                                </div> 
+                            }
                             <div className='extras col-md-3'>
                                 <img className='compass' src={require('./imgs/compass.png')} alt=''/>
                                 <div className={ this.state.user.score ? 'showScore' : 'noScore' }>

@@ -229,7 +229,10 @@ p.roverPos {
 }
 
 div.winner {
-  margin: 1em;
+ margin: .5em;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
 }
 
 #winPic {
@@ -240,8 +243,9 @@ div.winner {
 #winPara {
   background-color: rgb(61, 121, 61);
   padding: .5em;
+  margin: .5em;
   color: whitesmoke;
-  font-size: 24pt;
+  font-size: 1em;
   border-radius: 25px;
   font-weight: bold;
   width: fit-content;
