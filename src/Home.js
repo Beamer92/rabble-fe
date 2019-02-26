@@ -74,7 +74,7 @@ class Home extends Component {
 
         this.socket.on('connect game', (gameId, username) => {
             console.log(username, 'has connected to game ', gameId)
-            this.setState({gameId})
+            this.setState({gameId:gameId, winners: ''})
             this.getGame(gameId)
             if(this.state.user.hasOwnProperty('username') && this.state.user.username === username){
                 this.getUser(username)
@@ -237,6 +237,10 @@ class Home extends Component {
 
     executeInstructions=(event)=>{
         event.preventDefault()
+		// let newGameId = await Promise.all(users)
+		// for(let u = 0; u < endGame.users.length -1; i++){
+		// 	io.sockets.emit('connect game', newGameId, endGame.users[u].name)
+		// }
         if(!this.state.myTurn) return
         let results = operate(this.state.rover.position, this.state.rover.face, this.state.instructions)
         let newRover = {position: results.position, face: results.face}
