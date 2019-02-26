@@ -127,6 +127,10 @@ div.container {
  border-top-right-radius: 0;
 }
 /*-----------------------------*/
+.enemy {
+  font-style: italic;
+  font-family: 'Times New Roman', Times, serif;
+}
 
 .img {
   height: 22vh;
@@ -134,6 +138,14 @@ div.container {
 }
 
 @media (max-height: 1080px){
+  .roverimg {
+    width: 3.5em;
+    height: 3.5em;
+  }
+
+  .gbLetter{
+    font-size: 18pt;
+  }
 
   div.foot-item p{
     font-size: 18px;
@@ -179,6 +191,14 @@ div.container {
 }
 
 @media (max-height:768px) {
+  .roverimg {
+    width: 3em;
+    height: 2.5em;
+  }
+
+  .gbLetter{
+    font-size: 14pt;
+  }
 
   div.foot-item p{
     font-size: 16px;
@@ -232,11 +252,6 @@ div.container {
   flex-direction: row;
   padding-top: 1em;
   padding-bottom: 1em;
-}
-
-.roverimg {
-  width: 1.5em;
-  height: 1.5em;
 }
 
 .gridrw {

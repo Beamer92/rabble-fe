@@ -233,15 +233,32 @@ class Home extends Component {
         })
     }
 
+    flipface=(face)=> {
+        switch(face){
+            case 'N':
+            return require('./imgs/rvrimgN.jpg')
+            case 'S':
+            return require('./imgs/rvrimgS.jpg')
+            case 'E':
+            return require('./imgs/rvrimgE.jpg')
+            case 'W':
+            return require('./imgs/rvrimgW.jpg')
+            default:
+            return require('./imgs/rvrimgN.jpg')
+
+            
+        }
+    }
+
     renderRovers=(x, y)=>{
         if(this.state.rover.hasOwnProperty('position')){
             if(this.state.rover.position[0] === x && this.state.rover.position[1] === y){
-                return <img className='roverimg' src={require('./imgs/rvrimg.jpg')} alt='' />
+                return <img className='roverimg' src={this.flipface(this.state.rover.face)} alt='' />
             }
             else if(this.state.otherRovers.length > 0){
                 for(let pair of this.state.otherRovers){
                     if(pair[1][0] === x && pair[1][1] === y){
-                        return <div>{pair[0]}<img className='roverimg' src={require('./imgs/rvrimg.jpg')} alt=''/></div>
+                        return <div className='enemy'><img className='roverimg' src={require('./imgs/enemyrvrimg.jpg')} alt=''/>{pair[0][0]}</div>
                     }
                 }
             }
@@ -351,7 +368,7 @@ class Home extends Component {
                                 this.state.mapgrid.map((rw, ind) => {
                                     return <div className='gridrw' id={'gr' +ind} key={'gr' + ind}>
                                     {rw.map((box, idx) => {
-                                        return <div className='gridbox' id={'gb' + idx} key={'gb' + idx}>{box}{this.renderRovers(ind,idx)}</div>
+                                        return <div className='gridbox' id={'gb' + idx} key={'gb' + idx}><div className='gbLetter'>{box}</div>{this.renderRovers(ind,idx)}</div>
                                         })}
                                     </div>
                                 }) : 
