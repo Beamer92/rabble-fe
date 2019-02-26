@@ -58,17 +58,16 @@ class Home extends Component {
     }
 
     getDBuser=async(id, winners)=>{
-        console.log('winners', winners)
         let winUser = winners.findIndex(u => u.name === this.state.user.username)
         if(winUser !== -1){
             let update = {gamesWon: (this.state.user.gamesWon + 1)}
-            console.log(update)
             let updated = await request(`/user/${id}`, 'put', update)
         }
         let reGet = await request(`/user/${id}`, 'get')
         if(reGet){
             this.setState({
-                user: reGet.data
+                user: {...reGet.data,
+                        score: this.state.user.score}
             })
         }
     }
@@ -79,7 +78,8 @@ class Home extends Component {
             .then(response => {
                 if(response){
                     this.setState({
-                        user: response.data
+                        user: {...response.data,
+                            score: -1}
                     })
                     this.connectGame(response.data.username)
                 }
@@ -90,7 +90,7 @@ class Home extends Component {
 
         this.socket.on('connect game', (gameId, username) => {
             console.log(username, 'has connected to game ', gameId)
-            this.setState({gameId:gameId, winners: ''})
+            this.setState({gameId:gameId, winners: '', user: {...this.state.user, score: -1}})
             this.getGame(gameId)
             if(this.state.user.hasOwnProperty('username') && this.state.user.username === username){
                 this.getUser(username)
@@ -108,7 +108,8 @@ class Home extends Component {
             }
             this.setState({
                 rover: {position,face},
-                letters: JSON.parse(user.letters)
+                letters: JSON.parse(user.letters),
+                showErrorMessage:false
             })
 
             if(flag === true){
@@ -120,7 +121,8 @@ class Home extends Component {
             if(game.turn !== '' && game.turn === this.state.user.username){
                 this.setState({ mapgrid: JSON.parse(game.map),
                                 myTurn: true,
-                                actionsLeft: 5})
+                                actionsLeft: 5,
+                                showErrorMessage:false})
 
                 //start timer function for turn
             }
@@ -171,7 +173,8 @@ class Home extends Component {
                 myTurn: false,
                 actionsLeft: 0,
                 instructions: '',
-                winners: wstring
+                winners: wstring,
+                showErrorMessage:false
             })
             this.getDBuser(this.props.authentication.id, winners)
         })
@@ -253,10 +256,6 @@ class Home extends Component {
 
     executeInstructions=(event)=>{
         event.preventDefault()
-		// let newGameId = await Promise.all(users)
-		// for(let u = 0; u < endGame.users.length -1; i++){
-		// 	io.sockets.emit('connect game', newGameId, endGame.users[u].name)
-		// }
         if(!this.state.myTurn) return
         let results = operate(this.state.rover.position, this.state.rover.face, this.state.instructions)
         let newRover = {position: results.position, face: results.face}
@@ -285,7 +284,8 @@ class Home extends Component {
                     mapgrid: newMap,
                     instructions: '',
                     myTurn: false,
-                    actionsLeft: 0
+                    actionsLeft: 0,
+                    showErrorMessage:false
                 })
                 this.nextTurn(this.state.gameId)
                 this.setUser(this.state.user.username, newRover, newLetters)
@@ -297,7 +297,8 @@ class Home extends Component {
                     rover: newRover,
                     instructions: '',
                     myTurn: false,
-                    actionsLeft: 0
+                    actionsLeft: 0,
+                    showErrorMessage:false
                 })
                 this.nextTurn(this.state.gameId)
                 this.setUser(this.state.user.username, newRover, this.state.letters)
@@ -362,8 +363,8 @@ class Home extends Component {
                             }
                             <div className='extras col-md-3'>
                                 <img className='compass' src={require('./imgs/compass.png')} alt=''/>
-                                <div className={ this.state.user.score ? 'showScore' : 'noScore' }>
-                                        {this.state.user.score ? `You Scored ${this.state.user.score}!` : ''}
+                                <div className={this.state.user.score > -1 ? 'showScore' : 'noScore'}>
+                                        {this.state.user.score > -1 ? `You Scored ${this.state.user.score}!` : ''}
                                 </div>
                                 <div className={ this.state.myTurn ? 'myturn' : 'notmyturn' }>
                                         {this.state.myTurn ? 'It is your turn!' : 'Waiting for other players'}
