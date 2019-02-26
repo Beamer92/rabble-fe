@@ -245,8 +245,6 @@ class Home extends Component {
             return require('./imgs/rvrimgW.jpg')
             default:
             return require('./imgs/rvrimgN.jpg')
-
-            
         }
     }
 
