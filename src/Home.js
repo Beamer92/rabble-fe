@@ -57,6 +57,22 @@ class Home extends Component {
         }
     }
 
+    getDBuser=async(id, winners)=>{
+        console.log('winners', winners)
+        let winUser = winners.findIndex(u => u.name === this.state.user.username)
+        if(winUser !== -1){
+            let update = {gamesWon: (this.state.user.gamesWon + 1)}
+            console.log(update)
+            let updated = await request(`/user/${id}`, 'put', update)
+        }
+        let reGet = await request(`/user/${id}`, 'get')
+        if(reGet){
+            this.setState({
+                user: reGet.data
+            })
+        }
+    }
+
     componentDidMount(){
         //Mongo User data, NOT redis data
         request(`/user/${this.props.authentication.id}`, 'get')
@@ -157,7 +173,7 @@ class Home extends Component {
                 instructions: '',
                 winners: wstring
             })
-          
+            this.getDBuser(this.props.authentication.id, winners)
         })
     }
 
