@@ -7,9 +7,7 @@ const AuthenticatedRoute = props => {
     authentication: {
       pending,
       user
-    },
-    path,
-    component } = props
+    }} = props
 
   if(pending && !user){
     return <div>Loading...</div>

@@ -3,6 +3,7 @@ import request from './utils/request'
 import { Form, Button } from 'reactstrap'
 import socketIOClient from "socket.io-client";
 import {operate} from './utils/roverFunc'
+import Rules from './Rules'
 
 class Home extends Component {
     constructor(props) {
@@ -20,8 +21,15 @@ class Home extends Component {
             otherRovers: [],
             showErrorMessage: false,
             myTurn: false,
-            winners: ''
+            winners: '',
+            showRules: false
         }
+    }
+
+    showRules=()=> {
+        this.setState({
+            showRules: !this.state.showRules
+        })
     }
 
     connectGame=(username)=>{
@@ -61,7 +69,7 @@ class Home extends Component {
         let winUser = winners.findIndex(u => u.name === this.state.user.username)
         if(winUser !== -1){
             let update = {gamesWon: (this.state.user.gamesWon + 1)}
-            let updated = await request(`/user/${id}`, 'put', update)
+            await request(`/user/${id}`, 'put', update)
         }
         let reGet = await request(`/user/${id}`, 'get')
         if(reGet){
@@ -331,6 +339,7 @@ class Home extends Component {
             <div className='entrypage'>
                 <nav className='nav' id='navhome'>
                     <div className="backButton" onClick={this.logout}>Logout</div>
+                    <div className="toggleRules" onClick={this.showRules}>Show the Rules</div>
                     <h1 className='title'>Rabble Rover!</h1>
                 </nav>
                 <div className='container-fluid'>
@@ -353,13 +362,14 @@ class Home extends Component {
                                 <p className='game'>Instructions:</p>
                                 <p className='instructions'>{this.state.instructions}</p>
 
-                                <Button name='left' id='left' onClick={this.handleAction} disabled={this.state.actionsLeft < 1 ? true : false}>Left</Button>
-                                <Button name='right' id='right' onClick={this.handleAction} disabled={this.state.actionsLeft < 1 ? true : false}>Right</Button>
-                                <Button name='forward' id='forward' onClick={this.handleAction} disabled={this.state.actionsLeft < 1 ? true : false}>Forward</Button>
+                                <Button color={this.state.myTurn ? 'primary' : 'secondary'} name='left' id='left' onClick={this.handleAction} disabled={this.state.actionsLeft < 1 ? true : false}>Left</Button>
+                                <Button color={this.state.myTurn ? 'warning' : 'secondary'} name='right' id='right' onClick={this.handleAction} disabled={this.state.actionsLeft < 1 ? true : false}>Right</Button>
+                                <Button color={this.state.myTurn ? 'danger' : 'secondary'} name='forward' id='forward' onClick={this.handleAction} disabled={this.state.actionsLeft < 1 ? true : false}>Forward</Button>
                                 <div className='undoAction' onClick={this.handleUndo}>undo</div>
-                                <Button type='submit' disabled={!this.state.myTurn ? true : false}>Execute Instructions!</Button>
+                                <Button color={this.state.myTurn ? 'success' : 'secondary'} type='submit' disabled={!this.state.myTurn ? true : false}>Execute Instructions!</Button>
                             </Form>
                         </nav>
+                        {this.state.showRules ? <Rules/> : 
                         <div className='col-md mapgrid'>
                             {
                                 this.state.winners === '' ?
@@ -373,7 +383,7 @@ class Home extends Component {
                                 <div className='winner'>
                                     <img id='winPic' src={require('./imgs/winPic.jpg')} alt=''/>
                                     <p id='winPara'>{this.state.winners}</p>
-                                    <Button onClick={this.handleNewGame}>Play Again</Button>
+                                    <Button color={this.state.myTurn ? 'success' : 'secondary'} onClick={this.handleNewGame}>Play Again</Button>
                                 </div> 
                             }
                             <div className='extras col-md-3'>
@@ -388,14 +398,14 @@ class Home extends Component {
                                         Rover Fell off the grid! No letter collected, redeploying to last good location
                                 </div>
                             </div>
-                        </div>
+                        </div>}
                     </div>
                     <div className='row' id='letters'>
                         <nav className='col-md-2 d-none d-md-block sidebar'></nav>
                          <div className='rwlet'>{this.state.letters.map((letter, ind) => {
                             return <div className='letter' id={ind} key={ind} onClick={this.dropLetter}>{letter.toUpperCase()}</div>
                         })}</div>
-                        <Button className='rabble' onClick={this.submitRabble} disabled={!this.state.myTurn ? true : false}>Submit Rabble</Button>
+                        <Button className='rabble' color={this.state.myTurn ? 'success' : 'secondary'} onClick={this.submitRabble} disabled={!this.state.myTurn ? true : false}>Submit Rabble</Button>
                     </div>
                 </div>
             </div>
