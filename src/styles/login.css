@@ -5,10 +5,12 @@ div.entrypage, html {
 .login {
   display: -ms-flexbox;
   display: flex;
-  /* -ms-flex-align: center; */
-  /* align-items: center; */
-  /* justify-content: center; */
-  /* height: 90%; */
+}
+
+.login.row{
+  min-height: 375px;
+  height: 30vw;
+  align-items: center;
 }
 
 .login-hide-auth-error, .hide-crash, .noScore {
@@ -19,43 +21,19 @@ div.entrypage, html {
   text-align: center;
 }
 
-.login-form {
-  width: 100%;
-  max-width: 330px;
-  padding: 15px;
-  margin: auto;
-  margin-top: 1em;
-  margin-bottom: 1em;
-  background-color: #f5f5f5;
-  font-size: 16px;
-}
-
-.login-form input[type="text"] {
-  margin-bottom: 10px;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 0;
-}
-
-.login-form input[type="password"] {
-  margin-bottom: 5px;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-}
-
 .sub-button {
   margin-bottom: 10px;
-}
- 
-.img {
-  height: 80%;
-  width: 80%;
 }
 
 .footer {
   display: flex;
-  margin: 2em;
   justify-items: space-between;
   color: whitesmoke;
+  margin: 2em;
+}
+
+div.foot-item{
+  padding: 1em;
 }
 
 nav.nav {
@@ -81,28 +59,12 @@ div.container {
 
 
 /*-----------------------HomePage stuff below------------------------*/
-
-.sidebar {
-  background-color: rgb(196, 184, 184);
-  padding-top: 1em;
-  padding-bottom: 1em;
-}
-
-.gameActions button {
-  padding: 6px;
-  margin: 3px;
-}
-
-.gameActions p.game{
-  font-weight: bold;
+#letters {
+  background-color:  rgb(196, 184, 184);
 }
 
 #navhome {
   margin-bottom: 0em;
-}
-
-#letters {
-  background-color:  rgb(196, 184, 184);
 }
 
 .rwlet {
@@ -114,21 +76,18 @@ div.container {
   background-color: whitesmoke;
   color: black;
   font-weight: bold;
-  font-size: 16pt;
   margin: 2px;
   margin-left: .5em;
   margin-right: .5em;
-  padding: 3px;
 }
-
+  
 .letter:hover{
   background-color: red;
 }
 
 .undoAction {
-    font-size: 12px;
-    color:rgb(34, 78, 172);
-    text-decoration: underline;
+  color:rgb(34, 78, 172);
+  text-decoration: underline;
 }
 
 .undoAction:hover,.backButton:hover{
@@ -136,16 +95,133 @@ div.container {
 }
 
 .backButton{
-  font-size: 16px;
   font-weight: bold;
   position:absolute;
-  top:23px;
-  left:23px;
   color:rgb(255, 255, 255);
   text-shadow: rgb(0, 0, 0) 1px 1px;
   text-decoration: underline;
 }
 
+/*----------------------------*/
+.login-form {
+ width: 100%;
+ max-width: 330px;
+
+ padding: 15px;
+ margin: auto;
+ margin-top: 1em;
+ margin-bottom: 1em;
+ background-color: #f5f5f5;
+ font-size: 16px;
+}
+
+.login-form input[type="text"] {
+ margin-bottom: 10px;
+ border-bottom-right-radius: 0;
+ border-bottom-left-radius: 0;
+}
+
+.login-form input[type="password"] {
+ margin-bottom: 5px;
+ border-top-left-radius: 0;
+ border-top-right-radius: 0;
+}
+/*-----------------------------*/
+
+.img {
+  height: 22vh;
+  width: 15vw;
+}
+
+@media (max-height: 1080px){
+
+  div.foot-item p{
+    font-size: 18px;
+  }
+
+  .sidebar {
+    background-color: rgb(196, 184, 184);
+    padding-top: 2em;
+    padding-bottom: 2em;
+  }
+  
+  .gameActions button {
+    padding: 8px;
+    margin: 5px;
+  }
+  
+  .gameActions p.game{
+    font-weight: bold;
+  }
+
+  .letter {
+    padding: 5px;
+    font-size: 18pt;
+  }
+  
+  .undoAction {
+      font-size: 14px;
+  }
+  
+  .backButton{
+    font-size: 18px;
+    top:27px;
+    left:27px;
+  }
+
+  .gridbox {
+    width: 5.5em;
+    height: 5.5em;
+    padding: 1px;
+    border: 1px solid black;
+    background-color: whitesmoke;
+  }
+}
+
+@media (max-height:768px) {
+
+  div.foot-item p{
+    font-size: 16px;
+  }
+
+  .sidebar {
+    background-color: rgb(196, 184, 184);
+    padding-top: 1em;
+    padding-bottom: 1em;
+  }
+  
+  .gameActions button {
+    padding: 6px;
+    margin: 3px;
+  }
+  
+  .gameActions p.game{
+    font-weight: bold;
+  }
+
+  .letter {
+    font-size: 16pt;
+    padding: 3.5px;
+  }
+
+  .undoAction {
+      font-size: 12px;
+  }
+  
+  .backButton{
+    font-size: 16px;
+    top:23px;
+    left:23px;
+  }
+  
+  .gridbox {
+    width: 4.5em;
+    height: 4.5em;
+    padding: 1px;
+    border: 1px solid black;
+    background-color: whitesmoke;
+  }
+}
 
 /* ------------------- map grid ---------------------- */
 
@@ -154,24 +230,18 @@ div.container {
   position: absolute;
   margin:auto;
   flex-direction: row;
-}
-
-.gridrw {
-  display: flex;
-  flex-direction: column-reverse;
-}
-
-.gridbox {
-  width: 3.5em;
-  height: 3.5em;
-  padding: 1px;
-  border: 1px solid black;
-  background-color: whitesmoke;
+  padding-top: 1em;
+  padding-bottom: 1em;
 }
 
 .roverimg {
   width: 1.5em;
   height: 1.5em;
+}
+
+.gridrw {
+  display: flex;
+  flex-direction: column-reverse;
 }
 
 .crash {

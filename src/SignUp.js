@@ -51,7 +51,7 @@ class SignUp extends Component{
                     <h1 className='title'>Rabble Rover!</h1>
                 </nav>
                 <div className='container'>
-                    <div className='login'>
+                    <div className='login row'>
                         <Form className='login-form' onSubmit={this.submitSignup}>
                             <h2>Sign Up To Play</h2>
                             <Label>Username</Label>
@@ -77,7 +77,7 @@ class SignUp extends Component{
                 <footer className='footer'>
                         <div className='foot-item'>
                             <h4>Our Office Location</h4>
-                            <a href='http://mars3dmap.com'><img className='img' alt='' src={require('./imgs/Opportunity.png')}/></a>  
+                            <a href='https://www.google.com/mars/#lat=5.272769&lon=-21.570039&zoom=4&map=visible&q=spacecraft'><img className='img' alt='' src={require('./imgs/Opportunity.png')}/></a>  
                         </div>
                         <div className='foot-item'>
                             <h4>The Game:</h4>
