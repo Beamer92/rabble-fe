@@ -2,6 +2,10 @@ div.entrypage, html, .credits {
   background-color: rgb(29, 21, 21);
 }
 
+.credits {
+  color: rgb(175, 170, 170);
+  margin-left: 1em;
+}
 
 .login {
   display: -ms-flexbox;
