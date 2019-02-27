@@ -362,9 +362,9 @@ class Home extends Component {
                                 <p className='game'>Instructions:</p>
                                 <p className='instructions'>{this.state.instructions}</p>
 
-                                <Button color={this.state.myTurn ? 'primary' : 'secondary'} name='left' id='left' onClick={this.handleAction} disabled={this.state.actionsLeft < 1 ? true : false}>Left</Button>
+                                <Button color={this.state.myTurn ? 'warning' : 'secondary'} name='left' id='left' onClick={this.handleAction} disabled={this.state.actionsLeft < 1 ? true : false}>Left</Button>
                                 <Button color={this.state.myTurn ? 'warning' : 'secondary'} name='right' id='right' onClick={this.handleAction} disabled={this.state.actionsLeft < 1 ? true : false}>Right</Button>
-                                <Button color={this.state.myTurn ? 'danger' : 'secondary'} name='forward' id='forward' onClick={this.handleAction} disabled={this.state.actionsLeft < 1 ? true : false}>Forward</Button>
+                                <Button color={this.state.myTurn ? 'warning' : 'secondary'} name='forward' id='forward' onClick={this.handleAction} disabled={this.state.actionsLeft < 1 ? true : false}>Forward</Button>
                                 <div className='undoAction' onClick={this.handleUndo}>undo</div>
                                 <Button color={this.state.myTurn ? 'success' : 'secondary'} type='submit' disabled={!this.state.myTurn ? true : false}>Execute Instructions!</Button>
                             </Form>
