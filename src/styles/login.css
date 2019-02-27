@@ -116,7 +116,6 @@ div.container {
 .login-form {
  width: 100%;
  max-width: 330px;
-
  padding: 15px;
  margin: auto;
  margin-top: 1em;
@@ -136,6 +135,11 @@ div.container {
  border-top-left-radius: 0;
  border-top-right-radius: 0;
 }
+
+#pwreq{
+  font-size: 1.75vh;
+}
+
 /*-----------------------------*/
 .enemy {
   font-style: italic;
@@ -364,6 +368,8 @@ div.winner {
 }
 
 #winPic {
+  width: 80%;
+  height: 80%;
   max-width: 80%;
   max-height: 80%;
 }

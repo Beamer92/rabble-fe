@@ -62,6 +62,7 @@ class SignUp extends Component{
                             <Label>Verify Password</Label>
                             <Input type='password' name='inputPassword2' placeholder="************" minLength='8' 
                             pattern="(?=.*\d)(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[._$^%&*@#]).{8,}" value={this.state.inputPassword2} onChange={this.handleChange} required/>
+                            <div id='pwreq'>Must be 8 characters, include Uppercase and Lowercase letters, numbers and special characters</div>
                             {this.state.pw1 !== this.state.pw2
                                 ? <span className="passwordWarning">Passwords do not match</span>
                                 : ''
