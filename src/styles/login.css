@@ -1,6 +1,7 @@
-div.entrypage, html {
+div.entrypage, html, .credits {
   background-color: rgb(29, 21, 21);
 }
+
 
 .login {
   display: -ms-flexbox;
