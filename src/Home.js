@@ -341,10 +341,11 @@ class Home extends Component {
                     <div className="backButton" onClick={this.logout}>Logout</div>
                     <div className="toggleRules" onClick={this.showRules}>Show the Rules</div>
                     <h1 className='title'>Rabble Rover!</h1>
+                    
                 </nav>
                 <div className='container-fluid'>
                     <div className='row gamerw'>
-                        <nav className='col-md-2 d-none d-md-block sidebar'>
+                        <nav className='col-md-2 d-none d-md-block sidebar metal linear'>
                             <h6>GameId: </h6>
                             <p>{this.state.gameId}</p>
                             <h6>UserId: </h6>
@@ -383,7 +384,7 @@ class Home extends Component {
                                 <div className='winner'>
                                     <img id='winPic' src={require('./imgs/winPic.jpg')} alt=''/>
                                     <p id='winPara'>{this.state.winners}</p>
-                                    <Button color={this.state.myTurn ? 'success' : 'secondary'} onClick={this.handleNewGame}>Play Again</Button>
+                                    <Button color='primary' onClick={this.handleNewGame}>Play Again</Button>
                                 </div> 
                             }
                             <div className='extras col-md-3'>
@@ -400,17 +401,13 @@ class Home extends Component {
                             </div>
                         </div>}
                     </div>
-                    <div className='row' id='letters'>
-                        <nav className='col-md-2 d-none d-md-block sidebar'></nav>
+                    <div className='row metal linear' id='letters'>
                          <div className='rwlet'>{this.state.letters.map((letter, ind) => {
-                            return <div className='letter' id={ind} key={ind} onClick={this.dropLetter}>{letter.toUpperCase()}</div>
+                            return <div className='letter metal' id={ind} key={ind} onClick={this.dropLetter}>{letter.toUpperCase()}</div>
                         })}</div>
                         <Button className='rabble' color={this.state.myTurn ? 'success' : 'secondary'} onClick={this.submitRabble} disabled={!this.state.myTurn ? true : false}>Submit Rabble</Button>
                     </div>
                 </div>
-                <div className='credits'>Icons made by <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons">Smashicons</a> from <a href="https://www.flaticon.com/" 
-      title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/"
-      title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
             </div>
         )
     }

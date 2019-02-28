@@ -52,7 +52,7 @@ class SignUp extends Component{
                 </nav>
                 <div className='container'>
                     <div className='login row'>
-                        <Form className='login-form' onSubmit={this.submitSignup}>
+                        <Form className='login-form metal linear' onSubmit={this.submitSignup}>
                             <h2>Sign Up To Play</h2>
                             <Label>Username</Label>
                             <Input type='text' name='inputUser' placeholder="Enter your username here" value ={this.state.inputUser} onChange={this.handleChange}required autoFocus />
@@ -70,7 +70,7 @@ class SignUp extends Component{
                             <div className={ !this.state.showErrorMessage ? 'login-auth-error login-hide-auth-error' : 'login-auth-error' }>
                             Username Already Exists
                             </div>
-                            <Button className='sub-button' type='submit'>Submit</Button>
+                            <Button className='sub-button' color='primary' type='submit'>Submit</Button>
                             <p>Have a Login Already? <Link to='/login'>Login!</Link></p>
                         </Form>
                     </div>

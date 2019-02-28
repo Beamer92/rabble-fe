@@ -1,10 +1,33 @@
-div.entrypage, html, .credits {
+div.entrypage, html {
   background-color: rgb(29, 21, 21);
+}
+
+Button {
+  box-shadow: inset hsla(0,0%,15%,  1) 0  0px 0px 2px, 
+  inset hsla(0,0%,15%, .8) 0 -1px 4px 3px, 
+  inset hsla(0,0%,0%, .25) 0 -1px 0px 5px, 
+  inset hsla(0,0%,100%,.7) 0  2px 1px 5px,
+  
+  hsla(0,0%, 0%,.15) 0 -5px 6px 4px, 
+  hsla(0,0%,100%,.5) 1px  0px 4px 2px; 
+
+}
+
+Button:focus{
+  box-shadow: inset hsla(0,0%,15%,  1) 0  0px 0px 4px, 
+  inset hsla(0,0%,15%, .8) 0 -1px 5px 4px, 
+  inset hsla(0,0%,0%, .25) 0 -1px 0px 6px, 
+  inset hsla(0,0%,100%,.7) 0  2px 1px 6px,
+  
+  hsla(0,0%, 0%,.15) 0 -5px 6px 4px, 
+  hsla(0,0%,100%,.5) 0  5px 6px 4px !important; 
 }
 
 .credits {
   color: rgb(175, 170, 170);
-  margin-left: 1em;
+  top: 40px;
+  left: 40px;
+  font-size: 2vh;
 }
 
 .login {
@@ -13,8 +36,8 @@ div.entrypage, html, .credits {
 }
 
 .login.row{
-  min-height: 375px;
-  height: 30vw;
+  min-height: 30vw;
+  /* height: 30vw; */
   align-items: center;
 }
 
@@ -67,6 +90,7 @@ div.container {
 #letters {
   background-color:  rgb(196, 184, 184);
   align-items: center;
+  min-height: 12vh;
 }
 
 .rabble{
@@ -78,20 +102,20 @@ div.container {
 }
 
 .rwlet {
+  margin-left: 18vw;
   display: flex;
   padding: 1em;
 }
 
-.letter {
-  background-color: whitesmoke;
-  color: black;
+.metal.letter {
+  background-color: rgb(246, 157, 105);
   font-weight: bold;
   margin: 2px;
   margin-left: .5em;
   margin-right: .5em;
 }
   
-.letter:hover{
+.metal.letter:hover{
   background-color: red;
 }
 
@@ -166,7 +190,8 @@ div.container {
   }
 
   .sidebar {
-    background-color: rgb(196, 184, 184);
+    /* background-color: rgb(196, 184, 184);
+     */
     padding-top: 2em;
     padding-bottom: 2em;
   }
@@ -196,7 +221,9 @@ div.container {
   }
 
   .letter {
-    padding: 5px;
+    padding-right: 10px;
+    padding-left: 8px;
+    padding: 8px;
     font-size: 18pt;
   }
   
@@ -266,7 +293,9 @@ div.container {
 
   .letter {
     font-size: 16pt;
-    padding: 3.5px;
+    padding: 5px;
+    padding-right: 10px;
+    padding-left: 8px;
   }
 
   .undoAction {
@@ -351,6 +380,7 @@ div.container {
 }
 
 p.instructions {
+   color: rgb(141, 29, 29);
   height: .5em;
 }
 
@@ -383,4 +413,32 @@ div.winner {
   border-radius: 25px;
   font-weight: bold;
   width: fit-content;
+}
+
+.metal {
+  color: hsla(0,0%,20%,1);
+  text-shadow: hsla(0,0%,40%,.5) 0 -1px 0, hsla(0,0%,100%,.6) 0 2px 1px;
+  
+  background-color: hsl(0,0%,90%);
+  box-shadow: inset hsla(0,0%,15%,  1) 0  0px 0px 3px, /* border */
+    inset hsla(0,0%,15%, .8) 0 -1px 4px 3px, /* soft SD */
+    inset hsla(0,0%,0%, .25) 0 -1px 0px 4px, /* bottom SD */
+    inset hsla(0,0%,100%,.7) 0  2px 1px 4px, /* top HL */
+    
+    hsla(0,0%, 0%,.15) 0 -5px 4px 3px, /* outer SD */
+    hsla(0,0%,100%,.5) 0  4px 3px 2px; /* outer HL */ 
+  
+  transition: color .2s;
+}
+
+.metal.linear {
+  border-radius: .5em;
+  background-image: -webkit-repeating-linear-gradient(left, hsla(0,0%,100%,0) 0%, hsla(0,0%,100%,0)   6%, hsla(0,0%,100%, .1) 7.5%),
+    -webkit-repeating-linear-gradient(left, hsla(0,0%,  0%,0) 0%, hsla(0,0%,  0%,0)   4%, hsla(0,0%,  0%,.03) 4.5%),
+    -webkit-repeating-linear-gradient(left, hsla(0,0%,100%,0) 0%, hsla(0,0%,100%,0) 1.2%, hsla(0,0%,100%,.15) 2.2%),
+    
+    linear-gradient(180deg, hsl(0,0%,78%)  0%, 
+    hsl(0,0%,90%) 47%, 
+    hsl(0,0%,78%) 53%,
+    hsl(0,0%,70%)100%);
 }

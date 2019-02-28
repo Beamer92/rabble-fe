@@ -40,7 +40,7 @@ class Login extends Component{
                 </nav>
                 <div className='container'>
                     <div className='login row'>
-                        <Form className='login-form' onSubmit={this.submitLogin}>
+                        <Form className='login-form metal linear' onSubmit={this.submitLogin}>
                             <h2>Login To Play</h2>
                             <Label>Username</Label>
                             <Input type='text' name='inputUser' placeholder="Enter your username here" required autoFocus />
@@ -49,7 +49,7 @@ class Login extends Component{
                             <div className={ !this.state.showErrorMessage ? 'login-auth-error login-hide-auth-error' : 'login-auth-error' }>
                                 Invalid Username or Password
                             </div>
-                            <Button className='sub-button' type='submit'>Submit</Button>
+                            <Button className='sub-button' color='primary' type='submit'>Submit</Button>
                             <p>Haven't Played Before? <Link to='/signup'>Signup!</Link></p>
                         </Form>
                     </div>

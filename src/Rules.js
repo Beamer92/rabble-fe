@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function Rules(props){
     return (
-        <div id="rulesBar" className="sidebar rules">
+        <div id="rulesBar" className="sidebar rules metal linear">
         <h4>How to Play:</h4>
             <ul>
                 <li>You are the <strong>Opportunity Rover</strong> with the Green Arrow</li>
