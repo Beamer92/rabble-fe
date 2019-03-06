@@ -67,7 +67,7 @@ div.foot-item{
 nav.nav {
   height: 6em;
   margin-bottom: 2em;
-  background-image: url("../imgs/pano.jpg");
+  background-image: url("../imgs/pano2.jpg");
   background-size: 100% 100%; 
   display: flex;
   justify-content: center;
@@ -81,7 +81,7 @@ nav .title {
 }
 
 div.container {
-  background-image: url("../imgs/MarsBackground.png");
+  background-image: url("../imgs/MBackground.jpg");
   height: 120%;
 }
 

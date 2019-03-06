@@ -1,4 +1,3 @@
-
 # Rabble Rover FE
 
 This is the Front End for the Galvanize Capstone Project Game - Rabble Rover
@@ -17,7 +16,7 @@ Strategic players will also steal letters and drop them to keep others from gett
 
 
 ## Login
-![Alt text](./src/imgs/screenshots/RoverSC3.png "Login")
+![Alt text](./src/imgs/screenshots/RoverSC3.jpg "Login")
 
 ## The Rover
 ![Alt text](./src/imgs/screenshots/RoverSC2.png "Rover")
