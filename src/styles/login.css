@@ -67,7 +67,7 @@ div.foot-item{
 nav.nav {
   height: 6em;
   margin-bottom: 2em;
-  background-image: url("../imgs/pano2.jpg");
+  background-image: url("../imgs/marsBG.jpg");
   background-size: 100% 100%; 
   display: flex;
   justify-content: center;
