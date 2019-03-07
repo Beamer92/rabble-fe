@@ -175,7 +175,7 @@ class Home extends Component {
                 wstring = `There was a Tie between ${users.join('')} with a score of ${score}!`
             }
             else {
-                wstring = `The winner is ${winners[0].name} with a score of ${winners[0].score}!`
+                wstring = `The winner is ${winners[0].name} with the word ${winners[0].word.toUpperCase()} and a score of ${winners[0].score}!`
             }
             this.setState({
                 myTurn: false,
