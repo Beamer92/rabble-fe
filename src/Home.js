@@ -1,9 +1,13 @@
 import React, { Component } from 'react'
 import request from './utils/request'
-import { Form, Button } from 'reactstrap'
+import { Button } from 'reactstrap'
 import socketIOClient from "socket.io-client";
 import {operate} from './utils/roverFunc'
 import Rules from './Rules'
+import Rightside from './Rightside';
+import InstructionsForm from './InstructionsForm';
+import Stats from './Stats';
+import Grid from './Grid';
 
 class Home extends Component {
     constructor(props) {
@@ -334,71 +338,23 @@ class Home extends Component {
     }
 
     render() {
-
         return (
             <div className='entrypage'>
                 <nav className='nav' id='navhome'>
                     <div className="backButton" onClick={this.logout}>Logout</div>
                     <div className="toggleRules" onClick={this.showRules}>Show the Rules</div>
                     <h1 className='title'>Rabble Rover!</h1>
-                    
                 </nav>
                 <div className='container-fluid'>
                     <div className='row gamerw'>
                         <nav className='col-md-2 d-none d-md-block sidebar metal linear'>
-                            <h6>GameId: </h6>
-                            <p>{this.state.gameId}</p>
-                            <h6>UserId: </h6>
-                            <p>{this.state.user.username}</p>
-                            <h6>Position: </h6>
-                            <p className='roverPos'>{JSON.stringify(this.state.rover.position)}{' '}{this.state.rover.face}</p>
-                            <h6>My Best Score: </h6>
-                            <p>{this.state.user.highestScore}</p>
-                            <h6>My Games Won: </h6>
-                            <p>{this.state.user.gamesWon}</p>
-                            <h5>This Round:</h5>
-
-                            <Form className='gameActions'onSubmit={this.executeInstructions}>
-                                <p className='game'>Actions Left: {this.state.actionsLeft}</p>
-                                <p className='game'>Instructions:</p>
-                                <p className='instructions'>{this.state.instructions}</p>
-
-                                <Button color={this.state.myTurn ? 'warning' : 'secondary'} name='left' id='left' onClick={this.handleAction} disabled={this.state.actionsLeft < 1 ? true : false}>Left</Button>
-                                <Button color={this.state.myTurn ? 'warning' : 'secondary'} name='right' id='right' onClick={this.handleAction} disabled={this.state.actionsLeft < 1 ? true : false}>Right</Button>
-                                <Button color={this.state.myTurn ? 'warning' : 'secondary'} name='forward' id='forward' onClick={this.handleAction} disabled={this.state.actionsLeft < 1 ? true : false}>Forward</Button>
-                                <div className='undoAction' onClick={this.handleUndo}>undo</div>
-                                <Button color={this.state.myTurn ? 'success' : 'secondary'} type='submit' disabled={!this.state.myTurn ? true : false}>Execute Instructions!</Button>
-                            </Form>
+                            <Stats user={this.state.user} rover={this.state.rover} gameId={this.state.gameId}/>
+                            <InstructionsForm  actionsLeft={this.state.actionsLeft} instructions={this.state.instructions} myTurn={this.state.myTurn} executeInstructions={() => this.executeInstructions} handleAction={() => this.handleAction} handleUndo={() => this.handleUndo}/>
                         </nav>
                         {this.state.showRules ? <Rules/> : 
                         <div className='col-md mapgrid'>
-                            {
-                                this.state.winners === '' ?
-                                this.state.mapgrid.map((rw, ind) => {
-                                    return <div className='gridrw' id={'gr' +ind} key={'gr' + ind}>
-                                    {rw.map((box, idx) => {
-                                        return <div className='gridbox' id={'gb' + idx} key={'gb' + idx}><div className='gbLetter'>{box}</div>{this.renderRovers(ind,idx)}</div>
-                                        })}
-                                    </div>
-                                }) : 
-                                <div className='winner'>
-                                    <img id='winPic' src={require('./imgs/winPic.jpg')} alt=''/>
-                                    <p id='winPara'>{this.state.winners}</p>
-                                    <Button color='primary' onClick={this.handleNewGame}>Play Again</Button>
-                                </div> 
-                            }
-                            <div className='extras col-md-3'>
-                                <img className='compass' src={require('./imgs/compass.png')} alt=''/>
-                                <div className={this.state.user.score > -1 ? 'showScore' : 'noScore'}>
-                                        {this.state.user.score > -1 ? `You Scored ${this.state.user.score}!` : ''}
-                                </div>
-                                <div className={ this.state.myTurn ? 'myturn' : 'notmyturn' }>
-                                        {this.state.myTurn ? 'It is your turn!' : 'Waiting for other players'}
-                                </div>
-                                <div className={ !this.state.showErrorMessage ? 'crash hide-crash' : 'crash' }>
-                                        Rover Fell off the grid! No letter collected, redeploying to last good location
-                                </div>
-                            </div>
+                            <Grid winners={this.state.winners} mapgrid={this.state.mapgrid} renderRovers={()=> this.renderRovers} handleNewGame={()=> this.handleNewGame}/>
+                            <Rightside score={this.state.user.score} myTurn={this.state.myTurn} showErrorMessage={this.state.showErrorMessage}/>
                         </div>}
                     </div>
                     <div className='row metal linear' id='letters'>
